@@ -1,8 +1,8 @@
 use std::str::Chars;
 
 fn main() {
-    let binding: String = "a*vb{5}ggg{5,}".to_string();
-    println!("{}", regex(binding)("aaaaaaavbbvbgggggggggg".to_string()));
+    let binding: String = "vb{4}a?ggg{5,}".to_string();
+    println!("{}", regex(binding)("vbvbgggggggggg".to_string()));
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -64,11 +64,9 @@ impl Parser{
                             }
                         },
                         Token::Question(a) => {
-                            if a.contains(&cur_char){
-                                self.cur_rule += 1;
-                                self.count = 0;
-                                return;
-                            }
+                            self.cur_rule += if a.contains(&cur_char){1}else{2};
+                            self.count = 1;
+                            return;
                         },
                         Token::OR(a, b) => {
                             if a == &cur_char || b == &cur_char{
@@ -119,16 +117,14 @@ impl Parser{
                         Token::Plus(a) => {
                             if a.contains(&cur_char){
                                 self.cur_rule += 1;
-                                self.count = 0;
+                                self.count = 1;
                                 return;
                             }
                         },
                         Token::Question(a) => {
-                            if a.contains(&cur_char){
-                                self.cur_rule += 1;
-                                self.count = 0;
-                                return;
-                            }
+                            self.cur_rule += if a.contains(&cur_char){1}else{2};
+                            self.count = 1;
+                            return;
                         },
                         Token::OR(a, b) => {
                             if a == &cur_char || b == &cur_char{
@@ -188,11 +184,9 @@ impl Parser{
                             }
                         },
                         Token::Question(a) => {
-                            if a.contains(&cur_char){
-                                self.cur_rule += 1;
-                                self.count = 0;
-                                return;
-                            }
+                            self.cur_rule += if a.contains(&cur_char){1}else{2};
+                            self.count = 1;
+                            return;
                         },
                         Token::OR(a, b) => {
                             if a == &cur_char || b == &cur_char{
@@ -232,9 +226,9 @@ impl Parser{
                 }
             },
             Token::TimesEx(a, b) => {
+                self.count += 1;
                 if a > &self.count{
                     if b.contains(&cur_char){
-                        self.count += 1;
                         return;
                     }else{
                         self.cur_rule = 0;
@@ -266,11 +260,9 @@ impl Parser{
                             }
                         },
                         Token::Question(a) => {
-                            if a.contains(&cur_char){
-                                self.cur_rule += 1;
-                                self.count = 0;
-                                return;
-                            }
+                            self.cur_rule += if a.contains(&cur_char){1}else{2};
+                            self.count = 1;
+                            return;
                         },
                         Token::OR(a, b) => {
                             if a == &cur_char || b == &cur_char{
@@ -304,9 +296,9 @@ impl Parser{
                     }
             },
             Token::Timesleast(a, b) => {
+                self.count += 1;
                 if a > &self.count{
                     if b.contains(&cur_char){
-                        self.count += 1;
                         return;
                     }else{
                         self.cur_rule = 0;
@@ -334,11 +326,9 @@ impl Parser{
                             }
                         },
                         Token::Question(a) => {
-                            if a.contains(&cur_char){
-                                self.cur_rule += 1;
-                                self.count = 0;
-                                return;
-                            }
+                            self.cur_rule += if a.contains(&cur_char){1}else{2};
+                            self.count = 1;
+                            return;
                         },
                         Token::OR(a, b) => {
                             if a == &cur_char || b == &cur_char{
