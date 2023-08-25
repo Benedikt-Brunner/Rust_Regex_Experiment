@@ -226,9 +226,9 @@ impl Parser{
                 }
             },
             Token::TimesEx(a, b) => {
-                self.count += 1;
                 if a > &self.count{
                     if b.contains(&cur_char){
+                        self.count += 1;
                         return;
                     }else{
                         self.cur_rule = 0;
@@ -476,7 +476,8 @@ fn parsereg(
                     return parsereg(temp, char_store, it, tokens);
                 }
             }
-            _ => panic!("Regex isnt formated correctly!"),
+
+_ => panic!("Regex isnt formated correctly!"),
         }
     }
 }
